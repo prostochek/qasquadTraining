@@ -27,6 +27,13 @@ public class PageFavoriteLgCity {
         shoes.click();
     }
 
+    @FindBy (id = "menu-341")
+    WebElement lowerClothes;
+
+    public void clickLowerClothes() {
+        lowerClothes.click();
+    }
+
 }
 
 
