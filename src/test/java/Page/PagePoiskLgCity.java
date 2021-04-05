@@ -12,6 +12,7 @@ import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class PagePoiskLgCity {
@@ -28,6 +29,9 @@ public class PagePoiskLgCity {
         driver.get("https://lgcity.ru");
     }
 
+    /**
+     * Поиск товаров
+     * */
     @FindBy (xpath = "//a[@class='header__r-icons-link header__r-icons-link--search js-popup']")
     WebElement lupa;
     @FindBy (xpath ="//input[@name = 'q']")
@@ -59,6 +63,9 @@ public class PagePoiskLgCity {
             System.out.println("DICH");
         }
     }
+    /**
+     * Проверка сортировки по цене
+     * */
     public void openSort(){driver.get("https://lgcity.ru/outerwear/trench_coats/women/order_price-asc/");}
     @FindBy (xpath = "//div[@id = 'products-list']/a")
     List<WebElement> allCards;
@@ -86,5 +93,59 @@ public class PagePoiskLgCity {
         Collections.sort(clone);
         System.out.println(clone);
         Assert.assertEquals(clone, prices);
+    }
+/**
+ * Проверка города
+ * */
+    @FindBy (id = "input-user-locate")
+    WebElement input;
+    @FindBy (id = "btn-save-user-locate")
+    WebElement saveLoc;
+    public void city(String gorod) throws InterruptedException {
+        WebElement location = driver.findElement(By.xpath("//div[@id = 'header-title-user-location']"));
+        location.click();
+        input.click();
+        input.clear();
+        input.sendKeys(gorod);
+        saveLoc.click();
+        Thread.sleep(3000);
+        //wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(text(), 'Войти')]")));
+        WebElement locat = driver.findElement(By.id("header-title-user-location"));
+        Assert.assertEquals(locat.getText(), gorod);
+    }
+    public int getRandomNumberUsingNextInt(int min, int max) {
+        Random random = new Random();
+        return random.nextInt(max - min) + min;
+    }
+    public void popCity() throws InterruptedException {
+        WebElement location = driver.findElement(By.id("header-title-user-location"));
+        location.click();
+        List<WebElement> popCities = driver.findElements(By.xpath("//div[@class='locate__popular-list']/a"));
+        int size = popCities.size();
+        int rand = getRandomNumberUsingNextInt(1, size+1);
+        System.out.println(rand);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(text(), 'Укажите свой город')]")));
+        WebElement popGor = driver.findElement(By.xpath("//div[@class='locate__popular-list']/a["+rand+"]"));
+        String gorod = popGor.getText();
+        popGor.click();
+        System.out.println(input.getAttribute("value"));
+        saveLoc.click();
+        Thread.sleep(3000);
+        WebElement locat = driver.findElement(By.id("header-title-user-location"));
+        //wait.until(ExpectedConditions.textToBePresentInElementLocated(By.id("header-title-user-location"), locat.getText()));
+        Assert.assertEquals(gorod, locat.getText());
+    }
+    @FindBy (id = "menu-342")
+    WebElement shoes;
+    public void zakaz() throws InterruptedException {
+        shoes.click();
+        allCards.get(1).click();
+        WebElement addKorz = driver.findElement(By.id("btn-add-to-cart"));
+        addKorz.click();
+        Thread.sleep(1000);
+        WebElement goToKorz = driver.findElement(By.id("btn-add-to-cart"));
+        goToKorz.click();
+        WebElement order = driver.findElement(By.xpath("//botton[contains(text(), 'К оформлению')]"));
+        order.click();
     }
 }
