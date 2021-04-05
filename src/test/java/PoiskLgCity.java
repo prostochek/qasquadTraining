@@ -1,5 +1,5 @@
 
-import Pages.PagePoiskLgCity;
+import Page.PagePoiskLgCity;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -25,5 +25,11 @@ public class PoiskLgCity extends WebDriverSettings {
 
         krakozyabra.open();
         krakozyabra.search("/.<script>,/,vesa");
+    }
+    @Test
+    public void sortirovka() {
+        PagePoiskLgCity sort = new PagePoiskLgCity(driver, wait);
+        sort.openSort();
+        sort.sort();
     }
 }
