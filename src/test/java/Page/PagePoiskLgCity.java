@@ -8,6 +8,10 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.sql.SQLOutput;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class PagePoiskLgCity {
@@ -54,5 +58,33 @@ public class PagePoiskLgCity {
         else {
             System.out.println("DICH");
         }
+    }
+    public void openSort(){driver.get("https://lgcity.ru/outerwear/trench_coats/women/order_price-asc/");}
+    @FindBy (xpath = "//div[@id = 'products-list']/a")
+    List<WebElement> allCards;
+
+    public void sort(){
+        System.out.println(allCards.size());
+        //System.out.println(allCards.get(1).getText());//вывод всего текста (работает)
+        String itemprop;//аттрибут
+        String priceStr;//цена товара
+        ArrayList<Integer> prices = new ArrayList<Integer>();
+        for (int i=1; i<=allCards.size();i++){
+            WebElement card = driver.findElement(By.xpath("//div[@id = 'products-list']/a["+i+"]//div[@class = 'catalog__item-price']"));
+            itemprop = card.getAttribute("itemprop");
+            if(itemprop.equals("price")){
+                priceStr = card.getText().replaceAll("[^\\d.]", "");
+                prices.add(Integer.parseInt(priceStr));
+            } else{
+                WebElement cost = driver.findElement(By.xpath("//div[@id = 'products-list']/a["+i+"]//div[@class = 'catalog__item-price']/div[@class = 'catalog__item-price-new']"));
+                priceStr = cost.getText().replaceAll("[^\\d.]", "");
+                prices.add(Integer.parseInt(priceStr));
+            }
+        }
+        System.out.println(prices);
+        ArrayList<Integer> clone = new ArrayList<Integer>(prices);
+        Collections.sort(clone);
+        System.out.println(clone);
+        Assert.assertEquals(clone, prices);
     }
 }
