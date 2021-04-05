@@ -1,4 +1,4 @@
-import Pages.PageLgCity;
+import Page.PageLgCity;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
