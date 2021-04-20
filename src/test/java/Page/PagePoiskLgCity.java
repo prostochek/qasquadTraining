@@ -1,17 +1,20 @@
 package Page;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.interactions.Actions;
 
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class PagePoiskLgCity {
@@ -28,6 +31,9 @@ public class PagePoiskLgCity {
         driver.get("https://lgcity.ru");
     }
 
+    /**
+     * Поиск товаров
+     * */
     @FindBy (xpath = "//a[@class='header__r-icons-link header__r-icons-link--search js-popup']")
     WebElement lupa;
     @FindBy (xpath ="//input[@name = 'q']")
@@ -59,6 +65,9 @@ public class PagePoiskLgCity {
             System.out.println("DICH");
         }
     }
+    /**
+     * Проверка сортировки по цене
+     * */
     public void openSort(){driver.get("https://lgcity.ru/outerwear/trench_coats/women/order_price-asc/");}
     @FindBy (xpath = "//div[@id = 'products-list']/a")
     List<WebElement> allCards;
@@ -86,5 +95,87 @@ public class PagePoiskLgCity {
         Collections.sort(clone);
         System.out.println(clone);
         Assert.assertEquals(clone, prices);
+    }
+/**
+ * Проверка города
+ * */
+    @FindBy (id = "input-user-locate")
+    WebElement input;
+    @FindBy (id = "btn-save-user-locate")
+    WebElement saveLoc;
+    public void city(String gorod) throws InterruptedException {
+        WebElement location = driver.findElement(By.xpath("//div[@id = 'header-title-user-location']"));
+        location.click();
+        input.click();
+        input.clear();
+        input.sendKeys(gorod);
+        saveLoc.click();
+        Thread.sleep(3000);
+        //wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(text(), 'Войти')]")));
+        WebElement locat = driver.findElement(By.id("header-title-user-location"));
+        Assert.assertEquals(locat.getText(), gorod);
+    }
+    public int getRandomNumberUsingNextInt(int min, int max) {
+        Random random = new Random();
+        return random.nextInt(max - min) + min;
+    }
+    public void popCity() throws InterruptedException {
+        WebElement location = driver.findElement(By.id("header-title-user-location"));
+        location.click();
+        List<WebElement> popCities = driver.findElements(By.xpath("//div[@class='locate__popular-list']/a"));
+        int size = popCities.size();
+        int rand = getRandomNumberUsingNextInt(1, size+1);
+        System.out.println(rand);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(text(), 'Укажите свой город')]")));
+        WebElement popGor = driver.findElement(By.xpath("//div[@class='locate__popular-list']/a["+rand+"]"));
+        String gorod = popGor.getText();
+        popGor.click();
+        System.out.println(input.getAttribute("value"));
+        saveLoc.click();
+        Thread.sleep(3000);
+        WebElement locat = driver.findElement(By.id("header-title-user-location"));
+        //wait.until(ExpectedConditions.textToBePresentInElementLocated(By.id("header-title-user-location"), locat.getText()));
+        Assert.assertEquals(gorod, locat.getText());
+    }
+    @FindBy (id = "menu-342")
+    WebElement shoes;
+    public void zakaz() throws InterruptedException {
+        shoes.click();
+        allCards.get(1).click();
+        WebElement addKorz = driver.findElement(By.id("btn-add-to-cart"));
+        addKorz.click();
+        Thread.sleep(1000);
+        WebElement goToKorz = driver.findElement(By.id("btn-add-to-cart"));
+        goToKorz.click();
+        Thread.sleep(1000);
+
+        WebElement order = driver.findElement(By.xpath("//button[contains(text(), 'К оформлению')]"));
+        order.click();
+        WebElement notAuthorized = driver.findElement(By.xpath("//button[@class = 'button button--ghost btn-full']"));
+        notAuthorized.click();
+        WebElement name = driver.findElement(By.xpath("//div[contains(text(), \"Получатель\")]/parent::div[@class = \"cart__row-label\"]/following-sibling::div[@class = \"cart__row-content\"]//label[contains(text(), \"Имя\")]/following-sibling::input[@class = \"input__input\"]"));
+        name.click();
+        name.sendKeys("Василий");
+        WebElement surname = driver.findElement(By.xpath("//div[contains(text(), \"Получатель\")]/parent::div[@class = \"cart__row-label\"]/following-sibling::div[@class = \"cart__row-content\"]//label[contains(text(), \"Фамилия\")]/following-sibling::input[@class = \"input__input\"]"));
+        surname.click();
+        surname.sendKeys("Торопыркин");
+        WebElement email = driver.findElement(By.xpath("//div[contains(text(), \"Получатель\")]/parent::div[@class = \"cart__row-label\"]/following-sibling::div[@class = \"cart__row-content\"]//label[contains(text(), \"E-mail\")]/following-sibling::input[@class = \"input__input\"]"));
+        email.click();
+        email.sendKeys("torop@mail.kz");
+        WebElement phone = driver.findElement(By.xpath("//div[contains(text(), \"Получатель\")]/parent::div[@class = \"cart__row-label\"]/following-sibling::div[@class = \"cart__row-content\"]//label[contains(text(), \"Телефон\")]/following-sibling::input[@class = \"input__input\"]"));
+        phone.click();
+        phone.sendKeys("8005553535");
+        WebElement address = driver.findElement(By.xpath("//label[contains(text(), 'Населенный пункт')]/following-sibling::input[@class = 'input__input']"));
+        address.click();
+        address.sendKeys("Пушкина");
+        WebElement selectAddress = driver.findElement(By.xpath("//li[@class = \"selected-city\"]"));
+        selectAddress.click();
+        WebElement delivery = driver.findElement(By.xpath("//a[@class = \"button-with-icon \"]"));
+        delivery.click();
+
+        ((JavascriptExecutor) driver).executeScript("scroll(0, 400);");
+
+        //actions = ActionChains(driver)
+        //actions.move_to_element(element).perform()
     }
 }

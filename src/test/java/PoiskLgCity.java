@@ -32,4 +32,18 @@ public class PoiskLgCity extends WebDriverSettings {
         sort.openSort();
         sort.sort();
     }
+    @Test
+    public void gorod() throws InterruptedException {
+        PagePoiskLgCity pagePoiskLgCity = new PagePoiskLgCity(driver, wait);
+        pagePoiskLgCity.open();
+        pagePoiskLgCity.city("Куйбышев");
+        pagePoiskLgCity.popCity();
+    }
+    @Test
+    public void ordering() throws InterruptedException {
+        PagePoiskLgCity pagePoiskLgCity = new PagePoiskLgCity(driver, wait);
+        pagePoiskLgCity.open();
+        pagePoiskLgCity.zakaz();
+
+    }
 }
