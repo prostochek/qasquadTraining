@@ -1,12 +1,14 @@
 package Page;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.interactions.Actions;
 
 import java.sql.SQLOutput;
 import java.util.ArrayList;
@@ -145,7 +147,35 @@ public class PagePoiskLgCity {
         Thread.sleep(1000);
         WebElement goToKorz = driver.findElement(By.id("btn-add-to-cart"));
         goToKorz.click();
-        WebElement order = driver.findElement(By.xpath("//botton[contains(text(), 'К оформлению')]"));
+        Thread.sleep(1000);
+
+        WebElement order = driver.findElement(By.xpath("//button[contains(text(), 'К оформлению')]"));
         order.click();
+        WebElement notAuthorized = driver.findElement(By.xpath("//button[@class = 'button button--ghost btn-full']"));
+        notAuthorized.click();
+        WebElement name = driver.findElement(By.xpath("//div[contains(text(), \"Получатель\")]/parent::div[@class = \"cart__row-label\"]/following-sibling::div[@class = \"cart__row-content\"]//label[contains(text(), \"Имя\")]/following-sibling::input[@class = \"input__input\"]"));
+        name.click();
+        name.sendKeys("Василий");
+        WebElement surname = driver.findElement(By.xpath("//div[contains(text(), \"Получатель\")]/parent::div[@class = \"cart__row-label\"]/following-sibling::div[@class = \"cart__row-content\"]//label[contains(text(), \"Фамилия\")]/following-sibling::input[@class = \"input__input\"]"));
+        surname.click();
+        surname.sendKeys("Торопыркин");
+        WebElement email = driver.findElement(By.xpath("//div[contains(text(), \"Получатель\")]/parent::div[@class = \"cart__row-label\"]/following-sibling::div[@class = \"cart__row-content\"]//label[contains(text(), \"E-mail\")]/following-sibling::input[@class = \"input__input\"]"));
+        email.click();
+        email.sendKeys("torop@mail.kz");
+        WebElement phone = driver.findElement(By.xpath("//div[contains(text(), \"Получатель\")]/parent::div[@class = \"cart__row-label\"]/following-sibling::div[@class = \"cart__row-content\"]//label[contains(text(), \"Телефон\")]/following-sibling::input[@class = \"input__input\"]"));
+        phone.click();
+        phone.sendKeys("8005553535");
+        WebElement address = driver.findElement(By.xpath("//label[contains(text(), 'Населенный пункт')]/following-sibling::input[@class = 'input__input']"));
+        address.click();
+        address.sendKeys("Пушкина");
+        WebElement selectAddress = driver.findElement(By.xpath("//li[@class = \"selected-city\"]"));
+        selectAddress.click();
+        WebElement delivery = driver.findElement(By.xpath("//a[@class = \"button-with-icon \"]"));
+        delivery.click();
+
+        ((JavascriptExecutor) driver).executeScript("scroll(0, 400);");
+
+        //actions = ActionChains(driver)
+        //actions.move_to_element(element).perform()
     }
 }
