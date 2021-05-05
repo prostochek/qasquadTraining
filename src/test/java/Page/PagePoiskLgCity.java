@@ -175,6 +175,23 @@ public class PagePoiskLgCity {
 
         ((JavascriptExecutor) driver).executeScript("scroll(0, 400);");
 
+        WebElement pickUpPoint = driver.findElement(By.xpath("//div[contains(text(), 'ПУНКТ ВЫДАЧИ ЗАКАЗА')]/parent::div[@class = 'cart__row-label']/following-sibling::div[@class = 'cart__row-content']"));
+        pickUpPoint.click();
+        WebElement pointAddress = driver.findElement(By.xpath("//div[@class = 'cart-pickup-choose cp-choose js-show-delivery-point']"));
+        pointAddress.click();
+        WebElement chooseThisPoint = driver.findElement(By.xpath("//a[contains(text(), \"Выбрать этот пункт\")]"));
+        chooseThisPoint.click();
+
+        ((JavascriptExecutor) driver).executeScript("scroll(0, 1000);");
+
+        WebElement payment = driver.findElement(By.xpath("//div[contains(text(), \"СПОСОБ ОПЛАТЫ\")]/parent::div[@class = \"cart__row-label\"]/following-sibling::div[@class = \"cart__row-content\"]/label[1]"));
+        payment.click();
+
+        ((JavascriptExecutor) driver).executeScript("scroll(0, 1500);");
+
+        WebElement arrange = driver.findElement(By.xpath("//button[contains(text(), \"Оформить заказ\")]"));
+        arrange.click();
+
         //actions = ActionChains(driver)
         //actions.move_to_element(element).perform()
     }
