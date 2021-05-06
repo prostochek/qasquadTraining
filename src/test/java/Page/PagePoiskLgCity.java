@@ -179,8 +179,12 @@ public class PagePoiskLgCity {
         pickUpPoint.click();
         WebElement pointAddress = driver.findElement(By.xpath("//div[@class = 'cart-pickup-choose cp-choose js-show-delivery-point']"));
         pointAddress.click();
+        WebElement addresForProverka = driver.findElement(By.xpath("//div[@class = \"delivery-point__title\"]"));
+        String adressProveroch = addresForProverka.getText();
         WebElement chooseThisPoint = driver.findElement(By.xpath("//a[contains(text(), \"Выбрать этот пункт\")]"));
         chooseThisPoint.click();
+        WebElement addresForProverka1 = driver.findElement(By.xpath("//div[@class = \"cp-choose__title\"]"));
+        Assert.assertEquals(adressProveroch, addresForProverka1.getText());
 
         ((JavascriptExecutor) driver).executeScript("scroll(0, 1000);");
 
@@ -189,8 +193,14 @@ public class PagePoiskLgCity {
 
         ((JavascriptExecutor) driver).executeScript("scroll(0, 1500);");
 
-        WebElement arrange = driver.findElement(By.xpath("//button[contains(text(), \"Оформить заказ\")]"));
-        arrange.click();
+        /*WebElement arrange = driver.findElement(By.xpath("//button[contains(text(), \"Оформить заказ\")]"));
+        arrange.click();*/
+
+        Thread.sleep(1000);
+
+        WebElement cookie = driver.findElement(By.xpath("//div[@class = 'cookie--text']/a"));
+        cookie.click();
+
 
         //actions = ActionChains(driver)
         //actions.move_to_element(element).perform()
